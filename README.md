@@ -39,7 +39,7 @@ Data lives in the browser (`localStorage`). The only thing the backend sees is w
 
 ```bash
 # 1. Clone
-git clone https://github.com/your-handle/niche-blog-toolkit
+git clone https://github.com/Azamat771/niche-blog-toolkit
 cd niche-blog-toolkit
 
 # 2. Backend config

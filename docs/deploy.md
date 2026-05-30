@@ -17,7 +17,7 @@ Point an `A` record (e.g. `mytool.example.com`) at your VPS public IP.
 ssh root@your-vps
 sudo mkdir -p /opt/niche-blog-toolkit && sudo chown $USER /opt/niche-blog-toolkit
 cd /opt/niche-blog-toolkit
-git clone https://github.com/your-handle/niche-blog-toolkit .
+git clone https://github.com/Azamat771/niche-blog-toolkit .
 ```
 
 ### 3. Render the frontend

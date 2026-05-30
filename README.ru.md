@@ -39,7 +39,7 @@ mobile-first веб-приложение, где ты можешь:
 
 ```bash
 # 1. Клонируем
-git clone https://github.com/your-handle/niche-blog-toolkit
+git clone https://github.com/Azamat771/niche-blog-toolkit
 cd niche-blog-toolkit
 
 # 2. Конфиг бэкенда
