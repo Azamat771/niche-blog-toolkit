@@ -1,0 +1,24 @@
+{
+  "name": "niche-blog-toolkit",
+  "version": "1.0.0",
+  "description": "Self-hosted single-page content studio for niche Instagram bloggers. Idea bank with structured hooks/CTAs, AI generator with live trends (DeepSeek + Tavily), SMM and UGC agents. Russian-language, zero-dependency frontend.",
+  "license": "MIT",
+  "private": false,
+  "type": "commonjs",
+  "scripts": {
+    "build:template": "node scripts/build-template.js",
+    "apply:plants":   "node scripts/apply-niche.js examples/plants",
+    "apply:fitness":  "node scripts/apply-niche.js examples/fitness",
+    "seed:plants":    "node scripts/seed-ideas.js examples/plants --count=150",
+    "seed:fitness":   "node scripts/seed-ideas.js examples/fitness --count=30",
+    "backend":        "cd backend && node server.js"
+  },
+  "keywords": [
+    "instagram", "content-strategy", "smm", "ugc", "ai-agent",
+    "content-generator", "idea-bank", "deepseek", "tavily", "russian"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-handle/niche-blog-toolkit"
+  }
+}

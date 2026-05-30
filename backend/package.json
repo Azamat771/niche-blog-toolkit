@@ -1,0 +1,12 @@
+{
+  "name": "niche-blog-toolkit-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend for niche-blog-toolkit — idea generator + SMM/UGC agents (DeepSeek + Tavily).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:plants": "NICHE_CONFIG=../examples/plants/niche.json node server.js",
+    "start:fitness": "NICHE_CONFIG=../examples/fitness/niche.json node server.js"
+  }
+}

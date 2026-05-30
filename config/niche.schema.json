@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NicheConfig",
+  "description": "Configuration of a single niche for niche-blog-toolkit. Apply to frontend with `npm run apply -- examples/<niche>`.",
+  "type": "object",
+  "required": ["name", "title", "niche", "tone", "rubrics", "trendQuery"],
+  "properties": {
+    "name": { "type": "string", "description": "Machine-friendly slug, e.g. 'plants', 'fitness'." },
+    "title": { "type": "string", "description": "App title shown in header and <title>." },
+    "subtitle": { "type": "string", "description": "Short tagline under title." },
+    "brand": { "type": "string", "description": "Default Instagram handle shown in header chip (e.g. @example_blog)." },
+    "niche": { "type": "string", "description": "Niche description used in AI prompts, e.g. 'комнатные растения'." },
+    "audience": { "type": "string", "description": "Target audience description for AI prompts." },
+    "tone": { "type": "string", "description": "Default voice/tone of the blog used in prompts." },
+    "emoji": { "type": "string", "description": "Mascot emoji shown in header." },
+    "colors": {
+      "type": "object",
+      "properties": {
+        "primary":     { "type": "string", "description": "Primary brand color (hex)." },
+        "primaryDark": { "type": "string", "description": "Darker shade of primary." },
+        "accent":      { "type": "string", "description": "Accent color (hex)." },
+        "bg":          { "type": "string", "description": "Page background (hex)." }
+      }
+    },
+    "rubrics": {
+      "type": "array",
+      "description": "Content rubrics shown as filter chips. 10-14 items recommended.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "emoji", "color"],
+        "properties": {
+          "id":    { "type": "string", "description": "kebab-case id, used in idea.rubric." },
+          "name":  { "type": "string" },
+          "emoji": { "type": "string" },
+          "color": { "type": "string", "description": "Hex color for the chip and rubric tag." }
+        }
+      }
+    },
+    "trendQuery": {
+      "type": "string",
+      "description": "Tavily search query template. Supports {month}, {year} placeholders."
+    },
+    "packaging": {
+      "type": "object",
+      "description": "Default texts for the 'Profile Packaging' tab. Used as starter content for the user.",
+      "properties": {
+        "positioning": { "type": "string" },
+        "name":        { "type": "string" },
+        "bio_ru":      { "type": "string" },
+        "bio_en":      { "type": "string" },
+        "link":        { "type": "string" },
+        "highlights":  { "type": "string" },
+        "pinned":      { "type": "string" },
+        "visual":      { "type": "string" },
+        "avatar":      { "type": "string" },
+        "tone":        { "type": "string" }
+      }
+    }
+  }
+}

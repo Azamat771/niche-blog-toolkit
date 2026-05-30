@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} · {{SUBTITLE}}</title>
+<style>
+  :root{
+    --bg:{{COLOR_BG}};
+    --card:#ffffff;
+    --ink:#22312a;
+    --muted:#6b7d70;
+    --line:#e2ebe1;
+    --green:{{COLOR_PRIMARY}};
+    --green-dark:{{COLOR_PRIMARY_DARK}};
+    --green-soft:#e8f2e8;
+    --accent:{{COLOR_ACCENT}};
+    --blue:#4a90c2;
+    --shadow:0 1px 2px rgba(34,49,42,.06),0 6px 20px rgba(34,49,42,.07);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+
+  /* Header */
+  header.top{
+    background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);
+    color:#fff;padding:26px 0 70px;margin-bottom:-48px;
+  }
+  .top .wrap{padding-bottom:0}
+  .brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand h1{font-size:23px;margin:0;font-weight:700;letter-spacing:-.3px}
+  .brand .leaf{font-size:30px;line-height:1}
+  .brand .sub{opacity:.85;font-size:13.5px;margin-top:3px}
+  .acct{margin-left:auto;font-size:13px;background:rgba(255,255,255,.15);
+    padding:7px 13px;border-radius:999px;display:flex;align-items:center;gap:7px}
+  .acct b{font-weight:600}
+
+  /* Stats */
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 18px;box-shadow:var(--shadow);flex:1;min-width:130px}
+  .stat .n{font-size:26px;font-weight:700;color:var(--green-dark);line-height:1}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:5px}
+
+  /* Toolbar */
+  .toolbar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:16px;margin-bottom:20px}
+  .toolbar .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .search{flex:1;min-width:200px;position:relative}
+  .search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);
+    border-radius:11px;font-size:14.5px;background:#fafcf9;outline:none}
+  .search input:focus{border-color:var(--green);background:#fff}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.45}
+  select{padding:11px 12px;border:1px solid var(--line);border-radius:11px;
+    font-size:14px;background:#fafcf9;color:var(--ink);outline:none;cursor:pointer}
+  select:focus{border-color:var(--green)}
+
+  .btn{border:none;border-radius:11px;padding:11px 18px;font-size:14.5px;font-weight:600;
+    cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:hover{background:var(--green-dark)}
+  .btn-accent{background:var(--accent);color:#fff}
+  .btn-accent:hover{filter:brightness(.94)}
+  .btn-ai{background:linear-gradient(135deg,#6a5acd,#4a90c2);color:#fff;
+    box-shadow:0 2px 10px rgba(74,144,194,.35)}
+  .btn-ai:hover{filter:brightness(1.05)}
+  .btn-ai:disabled{opacity:.6;cursor:default;filter:none}
+  .es{margin-inline-end:.34em}   /* отступ эмодзи от текста в подписях */
+  .btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--green);color:var(--green-dark)}
+  .btn-ghost{background:var(--green-soft);color:var(--green-dark)}
+  .btn-ghost:hover{background:#dcebdc}
+  .btn-mini{padding:7px 12px;font-size:13px;font-weight:600;border-radius:9px;
+    border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer}
+  .btn-mini:hover{border-color:var(--green);color:var(--green-dark)}
+  .btn-mini.on{background:var(--green-soft);border-color:var(--green);color:var(--green-dark)}
+
+  /* Rubric chips */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .chip{padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;
+    font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+  .chip:hover{border-color:var(--green)}
+  .chip.on{background:var(--green);border-color:var(--green);color:#fff}
+  .chip .c{font-size:12px;opacity:.7}
+  .chip.on .c{opacity:.9}
+
+  /* Goal badges */
+  .goal{font-size:10.5px;padding:3px 8px;border-radius:999px;font-weight:700;color:#fff;
+    white-space:nowrap;letter-spacing:.2px}
+
+  /* Cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .ideacard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;
+    transition:.15s}
+  .ideacard:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(34,49,42,.08),0 12px 28px rgba(34,49,42,.10)}
+  .ideacard.used{opacity:.62}
+  .ideacard .tags{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .tag{font-size:11.5px;padding:4px 9px;border-radius:999px;font-weight:600;white-space:nowrap}
+  .tag.rubric{color:#fff}
+  .tag.format{background:#eef1ee;color:var(--muted)}
+  .tag.reels{background:#fdeef4;color:#bf6fa0}
+  .tag.mine{background:#fdf0e0;color:var(--accent)}
+  .ideacard h3{margin:2px 0 0;font-size:16.5px;font-weight:700;letter-spacing:-.2px}
+  .ideacard p{margin:0;font-size:14px;color:var(--muted)}
+  .ideacard .hookline{font-size:13px;color:var(--green-dark);background:var(--green-soft);
+    border-radius:9px;padding:7px 10px;margin:0}
+  .ideacard .goals{display:flex;gap:5px;flex-wrap:wrap}
+  .ideacard .more{font-size:12.5px;color:var(--green);cursor:pointer;font-weight:600;user-select:none}
+  .ideacard .detail{display:none;flex-direction:column;gap:7px;border-top:1px solid var(--line);
+    padding-top:9px;margin-top:1px}
+  .ideacard .detail.open{display:flex}
+  .ideacard .detail .d{font-size:13px;color:var(--ink)}
+  .ideacard .detail .d b{color:var(--green-dark);font-weight:700}
+  .ideacard .foot{margin-top:auto;display:flex;gap:6px;align-items:center;padding-top:6px;flex-wrap:wrap}
+  .icbtn{border:1px solid var(--line);background:#fff;border-radius:9px;width:34px;height:34px;
+    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:.15s}
+  .icbtn:hover{border-color:var(--green)}
+  .icbtn.fav.on{background:#fff7e6;border-color:var(--accent);color:var(--accent)}
+  .icbtn.done.on{background:var(--green-soft);border-color:var(--green);color:var(--green-dark)}
+  .foot .spacer{flex:1}
+
+  .empty{text-align:center;padding:70px 20px;color:var(--muted)}
+  .empty .big{font-size:46px;margin-bottom:10px}
+
+  /* Modal */
+  .overlay{position:fixed;inset:0;background:rgba(28,40,32,.45);display:none;
+    align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:18px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.3);
+    padding:24px}
+  .modal h2{margin:0 0 4px;font-size:19px}
+  .modal .hint{color:var(--muted);font-size:13px;margin:0 0 18px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+  .field input,.field textarea,.field select{width:100%;padding:11px 13px;border:1px solid var(--line);
+    border-radius:11px;font-size:14.5px;font-family:inherit;background:#fafcf9;outline:none}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--green);background:#fff}
+  .field textarea{min-height:90px;resize:vertical}
+  .modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+  .modal .two{display:flex;gap:12px}
+  .modal .two>*{flex:1}
+
+  /* Generator banner — structured */
+  .gen{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 20px;margin-bottom:20px;display:none}
+  .gen.show{display:block}
+  .gen.ai{border:1px solid #c9c0f0;background:linear-gradient(180deg,#f7f5ff 0%,#fff 60%)}
+  .genhead{display:flex;align-items:flex-start;gap:12px}
+  .genhead .leaf{font-size:28px;line-height:1.1}
+  .genmeta{flex:1;min-width:0}
+  .genmeta .r{font-size:12px;font-weight:700;color:var(--green-dark);text-transform:uppercase;letter-spacing:.4px}
+  .gen.ai .genmeta .r{color:#6a5acd}
+  .genmeta h3{margin:3px 0 6px;font-size:18px;letter-spacing:-.2px}
+  .genbadges{display:flex;gap:6px;flex-wrap:wrap}
+  .gen .x{cursor:pointer;font-size:20px;color:var(--muted);line-height:1}
+  .genbody{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  @media(max-width:560px){.genbody{grid-template-columns:1fr}}
+  .genblock{background:#fafcf9;border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .genblock.full{grid-column:1/-1}
+  .genblock .gl{font-size:11.5px;font-weight:700;color:var(--green);text-transform:uppercase;
+    letter-spacing:.3px;margin-bottom:4px}
+  .genblock .gt{font-size:13.5px;color:var(--ink);line-height:1.5}
+  .genfoot{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .genfoot .saved{font-size:13px;color:var(--green-dark);font-weight:600}
+  .spinner{width:18px;height:18px;border:2.5px solid rgba(106,90,205,.25);border-top-color:#6a5acd;
+    border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Agents (SMM / UGC) */
+  .agent-intro{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px}
+  .agent-intro h2{margin:0 0 6px;font-size:18px}
+  .agent-intro p{margin:0;color:var(--muted);font-size:14px}
+  .actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .act-chip{padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:#fff;
+    font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s}
+  .act-chip:hover{border-color:var(--green)}
+  .act-chip.on{background:linear-gradient(135deg,#6a5acd,#4a90c2);border-color:transparent;color:#fff}
+  .agent-panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px}
+  .agent-form .fld{margin-bottom:13px}
+  .agent-form label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:5px}
+  .agent-form input,.agent-form textarea,.agent-form select{width:100%;padding:11px 13px;
+    border:1px solid var(--line);border-radius:11px;font-size:14.5px;font-family:inherit;background:#fafcf9;outline:none}
+  .agent-form input:focus,.agent-form textarea:focus,.agent-form select:focus{border-color:var(--green);background:#fff}
+  .agent-form textarea{min-height:80px;resize:vertical;line-height:1.5}
+  .agent-out{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+  .agent-loading,.agent-msg{font-size:14px;color:var(--muted);padding:8px 0}
+  .agent-md{font-size:14.5px;line-height:1.6;color:var(--ink)}
+  .agent-md h3{font-size:15.5px;margin:16px 0 6px;color:var(--green-dark)}
+  .agent-md h3:first-child{margin-top:0}
+  .agent-md p{margin:0 0 9px}
+  .agent-md ul{margin:0 0 10px;padding-left:22px}
+  .agent-md li{margin:3px 0}
+  .agent-md b{color:var(--green-dark)}
+  .agent-md .mdrow{padding:6px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+  .agent-md .mdrow:last-child{border-bottom:none}
+  .copybar{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:34px}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;padding-top:6px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{border:none;cursor:pointer;font-size:14.5px;font-weight:600;padding:11px 20px;
+    border-radius:999px;background:rgba(255,255,255,.2);color:#fff;transition:.15s}
+  .tab:hover{background:rgba(255,255,255,.3)}
+  .tab.on{background:#fff;color:var(--green-dark);box-shadow:var(--shadow)}
+
+  /* Packaging worksheet */
+  .pack{display:flex;flex-direction:column;gap:16px;max-width:760px}
+  .pack-intro{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 20px}
+  .pack-intro h2{margin:0 0 6px;font-size:18px}
+  .pack-intro p{margin:0;color:var(--muted);font-size:14px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px}
+  .pcard .step{font-size:12px;font-weight:700;color:var(--green);letter-spacing:.4px;text-transform:uppercase}
+  .pcard h3{margin:4px 0 0;font-size:17px}
+  .pcard .why{background:var(--green-soft);border-radius:10px;padding:10px 13px;font-size:13.5px;
+    color:var(--green-dark);margin:11px 0}
+  .pcard .why b{font-weight:700}
+  .pcard label.fl{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:10px 0 5px}
+  .pcard textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;
+    font-family:inherit;font-size:14px;line-height:1.5;background:#fafcf9;outline:none;resize:vertical;min-height:60px}
+  .pcard textarea:focus{border-color:var(--green);background:#fff}
+  .pcard .two-col{display:flex;gap:14px;flex-wrap:wrap}
+  .pcard .two-col>div{flex:1;min-width:230px}
+  .checklist{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer;
+    font-size:14px;border-bottom:1px solid var(--line)}
+  .checklist label:last-child{border-bottom:none}
+  .checklist input{margin-top:3px;width:17px;height:17px;accent-color:var(--green);flex:none}
+  .saved-note{font-size:12px;color:var(--muted);margin-top:4px}
+
+  @media(max-width:600px){
+    .brand h1{font-size:20px}
+    .acct{margin-left:0;width:100%;justify-content:center;margin-top:4px}
+    .grid{grid-template-columns:1fr}
+
+    /* iOS: поля 16px — иначе Safari зумит страницу при фокусе */
+    .search input, select,
+    .field input, .field textarea, .field select,
+    .agent-form input, .agent-form textarea, .agent-form select,
+    .pcard textarea { font-size:16px }
+
+    /* Липкая панель вкладок — переключение разделов без прокрутки наверх */
+    .tabs{
+      position:sticky; top:0; z-index:30;
+      background:var(--green-dark);
+      margin:0 -18px 18px; padding:10px 18px;
+      gap:6px; box-shadow:0 4px 12px rgba(34,49,42,.18);
+    }
+    .tab{padding:10px 15px; font-size:13.5px}
+
+    /* Компактный тулбар: кнопки действий рядами по 2, единой высоты */
+    .toolbar .row .btn{flex:1 1 45%; justify-content:center}
+    .toolbar .row .btn-mini{flex:1 1 40%; justify-content:center; text-align:center}
+
+    /* Крупнее тап-зоны (рекомендация Apple ≥44px) */
+    .btn{min-height:46px}
+    .btn-mini{min-height:42px; display:inline-flex; align-items:center; justify-content:center}
+    .act-chip{min-height:46px; display:inline-flex; align-items:center; flex:1 1 45%; justify-content:center}
+    .chip{padding:9px 13px}
+    .icbtn{width:40px; height:40px; font-size:17px}
+
+    /* Кнопки результата агентов/баннера — удобные пальцу */
+    .copybar .btn-mini{flex:1 1 45%}
+    .genfoot .btn, .genfoot .btn-ai, .genfoot .btn-primary, .genfoot .btn-accent{flex:1 1 45%; justify-content:center}
+
+    /* Фикс: автоскролл к результату оставляет место под липкие вкладки (иначе верх уезжает под них) */
+    html{scroll-padding-top:112px}
+    #gen, .agent-out, #tab-smm, #tab-ugc{scroll-margin-top:112px}
+
+    /* Компактные статы — не съедают весь первый экран (3 в ряд, мельче) */
+    .stats{gap:8px}
+    .stat{flex:1 1 28%; min-width:0; padding:10px 12px}
+    .stat .n{font-size:21px}
+    .stat .l{font-size:11px;margin-top:3px}
+
+    /* Тулбар чуть плотнее */
+    .toolbar{padding:13px}
+    .toolbar .row{gap:8px}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <span class="leaf">{{EMOJI}}</span>
+      <div>
+        <h1>{{TITLE}}</h1>
+        <div class="sub">{{SUBTITLE}}</div>
+      </div>
+      <div class="acct">📷 <b id="acctName">{{BRAND_HANDLE}}</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tabs">
+    <button class="tab on" data-tab="ideas"><span class="es">💡</span>Банк идей</button>
+    <button class="tab" data-tab="smm"><span class="es">📅</span>SMM-агент</button>
+    <button class="tab" data-tab="ugc"><span class="es">🎬</span>UGC-агент</button>
+    <button class="tab" data-tab="pack"><span class="es">📦</span>Упаковка профиля</button>
+  </div>
+
+  <section id="tab-ideas">
+
+  <div class="stats" id="stats"></div>
+
+  <!-- Generator banner (structured) -->
+  <div class="gen" id="gen">
+    <div class="genhead">
+      <span class="leaf" id="genIcon">💡</span>
+      <div class="genmeta">
+        <div class="r" id="genRubric"></div>
+        <h3 id="genTitle"></h3>
+        <div class="genbadges" id="genBadges"></div>
+      </div>
+      <span class="x" id="genClose" title="Закрыть">✕</span>
+    </div>
+    <div class="genbody" id="genBody"></div>
+    <div class="genfoot" id="genFoot"></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="row">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="search" type="text" placeholder="Поиск по идеям…">
+      </div>
+      <select id="formatFilter">
+        <option value="">Все форматы</option>
+        <option>Reels</option>
+        <option>Карусель</option>
+        <option>Пост</option>
+        <option>Stories</option>
+      </select>
+      <button class="btn-mini" id="favFilter"><span class="es">⭐</span>Избранное</button>
+      <button class="btn-mini" id="hideUsed">Скрыть использованные</button>
+      <button class="btn btn-ai" id="aiBtn"><span class="es">✨</span>Свежая идея от AI</button>
+      <button class="btn btn-outline" id="surprise"><span class="es">🎲</span>Подкинь идею</button>
+      <button class="btn btn-outline" id="addBtn"><span class="es">＋</span>Своя идея</button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="big">🌱</div>
+    <div>Ничего не нашлось. Поменяй фильтры или <b>добавь свою идею</b>.</div>
+  </div>
+
+  </section><!-- /tab-ideas -->
+
+  <section id="tab-smm" hidden>
+    <div class="agent-intro">
+      <h2>📅 SMM-агент</h2>
+      <p>Помогает вести аккаунт: подписи к постам с хэштегами, контент-план на неделю, адаптация поста под Telegram/VK и идеи Stories-активностей. Читает твою «Упаковку профиля» — заполни её для точного тона. Выбери действие ниже.</p>
+    </div>
+    <div class="actions-row" data-agent="smm"></div>
+    <div class="agent-panel" data-agent="smm"></div>
+  </section><!-- /tab-smm -->
+
+  <section id="tab-ugc" hidden>
+    <div class="agent-intro">
+      <h2>🎬 UGC-агент</h2>
+      <p>Помогает зарабатывать на UGC — контенте для брендов (магазины растений, кашпо, удобрения, грунты, лампы). Сценарии под товар, питч-письма брендам, идеи видео и медиа-кит с ценами. Выбери действие ниже.</p>
+    </div>
+    <div class="actions-row" data-agent="ugc"></div>
+    <div class="agent-panel" data-agent="ugc"></div>
+  </section><!-- /tab-ugc -->
+
+  <section id="tab-pack" hidden>
+    <div class="pack">
+      <div class="pack-intro">
+        <h2>📦 Упаковка профиля</h2>
+        <p>«Упаковка» — это первое, что видит новый человек: имя, шапка, актуальное, лента. За 2–3 секунды он решает, подписаться или уйти. Ниже — готовый каркас под блог о растениях. Тексты уже заполнены черновиком — правь под себя, всё сохраняется автоматически. <b>Бонус:</b> кнопка «✨ Свежая идея от AI» в банке идей читает эти тексты и подбирает идеи именно под твой профиль — чем подробнее заполнишь, тем точнее идеи.</p>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 1</div>
+        <h3>Позиционирование — о чём блог в одной фразе</h3>
+        <div class="why">За пару секунд человек должен понять: <b>про что блог и зачем подписываться</b>. Сформулируй суть одной строкой — из неё родятся имя и шапка.</div>
+        <label class="fl">Суть блога одной фразой</label>
+        <textarea data-save="positioning" rows="2">{{PACK_POSITIONING}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 2</div>
+        <h3>Имя профиля (поле «Имя», не ник)</h3>
+        <div class="why">Поле <b>«Имя»</b> участвует в поиске Instagram. Впиши туда не просто «Вика», а <b>ключевые слова</b>, по которым тебя будут искать новички.</div>
+        <label class="fl">Имя для поиска</label>
+        <textarea data-save="name" rows="1">{{PACK_NAME}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 3</div>
+        <h3>Шапка профиля (описание / bio)</h3>
+        <div class="why">До 150 знаков. Формула: <b>кто ты + чем полезна + кому + призыв</b>. Короткие строки, эмодзи-маркеры в начале строк, последняя строка — стрелка вниз 👇 на ссылку.</div>
+        <div class="two-col">
+          <div>
+            <label class="fl">Вариант на русском</label>
+            <textarea data-save="bio_ru" rows="5">{{PACK_BIO_RU}}</textarea>
+          </div>
+          <div>
+            <label class="fl">Вариант на английском (ник-то английский)</label>
+            <textarea data-save="bio_en" rows="5">{{PACK_BIO_EN}}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 4</div>
+        <h3>Ссылка под шапкой</h3>
+        <div class="why">Одной ссылки мало. Поставь <b>мультиссылку</b> (Taplink или Linktree) — туда сложи гайд, заказ/консультацию, отзывы, другие соцсети.</div>
+        <label class="fl">Что положить в мультиссылку</label>
+        <textarea data-save="link" rows="3">{{PACK_LINK}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 5</div>
+        <h3>Актуальное (вечные сторис / хайлайтс)</h3>
+        <div class="why">Это <b>«меню» блога</b>. 6–8 кружочков с <b>едиными обложками</b> в одном стиле и цвете. Первым ставь «Знакомство».</div>
+        <label class="fl">Список актуальных</label>
+        <textarea data-save="highlights" rows="8">{{PACK_HIGHLIGHTS}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 6</div>
+        <h3>Закреплённые посты (3 штуки)</h3>
+        <div class="why">Первые 3 поста в ленте видит <b>каждый новый гость</b>. Закрепи самые сильные — знакомство, пользу и доказательство/оффер.</div>
+        <label class="fl">Что закрепить</label>
+        <textarea data-save="pinned" rows="4">{{PACK_PINNED}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 7</div>
+        <h3>Визуал ленты</h3>
+        <div class="why">Единый вид = ощущение «профи» с первого взгляда. Выбери палитру и шаблон обложек — и держи их во всех постах.</div>
+        <label class="fl">Правила визуала</label>
+        <textarea data-save="visual" rows="5">{{PACK_VISUAL}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Шаг 8</div>
+        <h3>Аватар и голос блога</h3>
+        <div class="why">На маленьком кружке аватара должно быть всё понятно с первого взгляда. А «голос» держит тон во всех текстах.</div>
+        <label class="fl">Аватар</label>
+        <textarea data-save="avatar" rows="2">{{PACK_AVATAR}}</textarea>
+        <label class="fl">Tone of voice (голос блога)</label>
+        <textarea data-save="tone" rows="3">{{PACK_TONE}}</textarea>
+      </div>
+
+      <div class="pcard">
+        <div class="step">Финал</div>
+        <h3>✅ Чек-лист упаковки</h3>
+        <div class="checklist">
+          <label><input type="checkbox" data-check="c1"> В поле «Имя» есть ключевые слова (растения / уход)</label>
+          <label><input type="checkbox" data-check="c2"> Шапка по формуле, ≤150 знаков, с призывом 👇</label>
+          <label><input type="checkbox" data-check="c3"> Стоит мультиссылка (Taplink / Linktree)</label>
+          <label><input type="checkbox" data-check="c4"> 6–8 актуальных с едиными обложками</label>
+          <label><input type="checkbox" data-check="c5"> Закреплены 3 поста (знакомство + польза + оффер)</label>
+          <label><input type="checkbox" data-check="c6"> Единая палитра и шаблон обложек в ленте</label>
+          <label><input type="checkbox" data-check="c7"> Понятный аватар</label>
+          <label><input type="checkbox" data-check="c8"> В шапке есть оффер (гайд или услуга)</label>
+        </div>
+        <p class="saved-note">Всё на этой вкладке сохраняется в браузере автоматически.</p>
+      </div>
+    </div>
+  </section><!-- /tab-pack -->
+
+  <footer>
+    <div style="margin-bottom:8px">
+      <button class="btn-mini" id="exportBtn"><span class="es">⬇</span>Сохранить копию (файл)</button>
+      <button class="btn-mini" id="importBtn"><span class="es">⬆</span>Загрузить копию</button>
+      <button class="btn-mini" id="restoreBtn"><span class="es">↺</span>Вернуть базовые идеи</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none">
+    </div>
+    Все идеи хранятся прямо в твоём браузере. Никуда не отправляются.<br>«✨ Свежая идея от AI» — единственная кнопка, которая отправляет на сервер только тексты «Упаковки профиля», чтобы придумать идею.<br><a href="https://github.com/your-handle/niche-blog-toolkit" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Built with niche-blog-toolkit (MIT)</a>
+  </footer>
+</div>
+
+<!-- Modal: add/edit idea -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">Своя идея</h2>
+    <p class="hint">Запиши идею поста, чтобы не держать в голове.</p>
+    <div class="field">
+      <label>Заголовок идеи</label>
+      <input id="fTitle" type="text" placeholder="Напр.: 5 растений, которые простят вам забывчивость">
+    </div>
+    <div class="field">
+      <label>Описание / подсказка (необязательно)</label>
+      <textarea id="fText" placeholder="О чём пост, какой посыл, что показать на фото…"></textarea>
+    </div>
+    <div class="two">
+      <div class="field">
+        <label>Рубрика</label>
+        <select id="fRubric"></select>
+      </div>
+      <div class="field">
+        <label>Формат</label>
+        <select id="fFormat">
+          <option>Reels</option><option>Карусель</option><option>Пост</option><option>Stories</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="cancelBtn">Отмена</button>
+      <button class="btn btn-primary" id="saveBtn">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Конфиг AI ============ */
+/* Запрос идёт на тот же домен → /api/generate (nginx проксирует на бэкенд).
+   Токен — лёгкая защита от случайного curl, не настоящий секрет (он в коде страницы). */
+const API_BASE = "";
+const AI_TOKEN = "{{SHARED_TOKEN}}";
+
+/* ============ Рубрики ============ */
+const RUBRICS = /*__RUBRICS__*/[];
+const rubMap = Object.fromEntries(RUBRICS.map(r=>[r.id,r]));
+
+/* ============ Цели (для бейджей и подбора) ============ */
+const GOALS = {
+  reach:      {l:"📈 охваты",     c:"#3f7d52"},
+  saves:      {l:"🔖 сохранения", c:"#c98a3b"},
+  engagement: {l:"💬 вовлечение", c:"#4a90c2"},
+};
+
+/* ============ Базовый банк идей ============
+   Поля: r=рубрика, f=формат, t=заголовок,
+   hook=первые 3 сек, shoot=что показать, ret=удержание, cta=призыв, why=почему зайдёт,
+   v=цели (reach/saves/engagement) */
+const SEED = /*__SEED__*/[];
+
+/* ============ Хранилище ============ */
+const KEY = "nbtk_{{NICHE_NAME}}_ideas_v1";
+const SEED_VERSION = 3;            // бамп при правках контента базовых идей
+const VKEY = "nbtk_{{NICHE_NAME}}_seed_v";    // версия применённого SEED в localStorage
+let ideas = [];
+
+function seedIdeas(){
+  return SEED.map((s,i)=>({
+    id:"seed-"+i, rubric:s.r, format:s.f, title:s.t,
+    hook:s.hook, shoot:s.shoot, retention:s.ret, cta:s.cta, why:s.why,
+    viral:s.v||[], text:"", mine:false, fav:false, used:false
+  }));
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ ideas = JSON.parse(raw); migrate(); return; }
+  }catch(e){}
+  ideas = seedIdeas();
+  try{ localStorage.setItem(VKEY, String(SEED_VERSION)); }catch(e){}
+  save();
+}
+/* Миграция: добираем новые поля; при бампе SEED_VERSION обновляем контент базовых
+   идей (чтобы правки дошли до уже сохранённого банка), сохраняя ⭐/✓ и свои идеи. */
+function migrate(){
+  const fresh = seedIdeas();
+  const byId = Object.fromEntries(fresh.map(s=>[s.id,s]));
+  let changed = false;
+  ideas.forEach(i=>{
+    const s = byId[i.id];
+    if(s && i.hook===undefined){
+      i.hook=s.hook; i.shoot=s.shoot; i.retention=s.retention;
+      i.cta=s.cta; i.why=s.why; i.viral=s.viral;
+      if(!i.format || i.format==="undefined") i.format=s.format;
+      changed = true;
+    }
+    if(i.viral===undefined){ i.viral=[]; changed=true; }
+  });
+  // обновление контента базовых идей по версии (пользовательские mine:true не трогаем)
+  let storedV = 0; try{ storedV = parseInt(localStorage.getItem(VKEY)||"0",10)||0; }catch(e){}
+  if(storedV < SEED_VERSION){
+    ideas.forEach(i=>{
+      const s = byId[i.id];
+      if(s && !i.mine){
+        i.rubric=s.rubric; i.format=s.format; i.title=s.title;
+        i.hook=s.hook; i.shoot=s.shoot; i.retention=s.retention;
+        i.cta=s.cta; i.why=s.why; i.viral=s.viral;
+        // i.fav и i.used не трогаем
+      }
+    });
+    try{ localStorage.setItem(VKEY, String(SEED_VERSION)); }catch(e){}
+    changed = true;
+  }
+  const have = new Set(ideas.map(i=>i.id));
+  fresh.forEach(s=>{ if(!have.has(s.id)){ ideas.push(s); changed=true; } });
+  if(changed) save();
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(ideas)); }catch(e){} }
+
+/* ============ Состояние фильтров ============ */
+const state = { rubric:"", format:"", q:"", favOnly:false, hideUsed:false };
+let editingId = null;
+let lastAiIdea = null;
+let recentTitles = [];   // последние сгенерированные/показанные заголовки — для анти-повтора AI
+
+/* ============ Рендер ============ */
+const $ = s=>document.querySelector(s);
+const grid = $("#grid"), empty = $("#empty");
+
+function goalBadges(v){
+  return (v||[]).map(g=>GOALS[g]
+    ? `<span class="goal" style="background:${GOALS[g].c}">${GOALS[g].l}</span>` : "").join("");
+}
+
+function renderChips(){
+  const wrap = $("#chips");
+  const all = `<span class="chip ${state.rubric===""?"on":""}" data-r="">Все рубрики</span>`;
+  const items = RUBRICS.map(r=>{
+    const cnt = ideas.filter(i=>i.rubric===r.id).length;
+    const on = state.rubric===r.id?"on":"";
+    return `<span class="chip ${on}" data-r="${r.id}" ${on?`style="background:${r.color};border-color:${r.color}"`:""}><span class="es">${r.emoji}</span>${r.name} <span class="c">${cnt}</span></span>`;
+  }).join("");
+  wrap.innerHTML = all + items;
+  wrap.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ state.rubric=c.dataset.r; render(); });
+}
+
+function renderStats(){
+  const total = ideas.length;
+  const used = ideas.filter(i=>i.used).length;
+  const fav = ideas.filter(i=>i.fav).length;
+  const ready = total-used;
+  $("#stats").innerHTML = `
+    <div class="stat"><div class="n">${total}</div><div class="l">идей всего</div></div>
+    <div class="stat"><div class="n">${ready}</div><div class="l">ждут публикации</div></div>
+    <div class="stat"><div class="n">${used}</div><div class="l">опубликовано</div></div>
+    <div class="stat"><div class="n">${fav}</div><div class="l">в избранном</div></div>
+    <div class="stat"><div class="n">${RUBRICS.length}</div><div class="l">рубрик</div></div>`;
+}
+
+function filtered(){
+  const q = state.q.trim().toLowerCase();
+  return ideas.filter(i=>{
+    if(state.rubric && i.rubric!==state.rubric) return false;
+    if(state.format && i.format!==state.format) return false;
+    if(state.favOnly && !i.fav) return false;
+    if(state.hideUsed && i.used) return false;
+    if(q && !(i.title.toLowerCase().includes(q) || (i.text||"").toLowerCase().includes(q)
+      || (i.hook||"").toLowerCase().includes(q))) return false;
+    return true;
+  });
+}
+
+function card(i){
+  const r = rubMap[i.rubric] || {name:i.rubric,color:"#888",emoji:"🌿"};
+  const fmtClass = i.format==="Reels" ? "reels" : "format";
+  const hasDetail = i.hook || i.shoot || i.retention || i.cta || i.why;
+  const detail = hasDetail ? `
+    <div class="more" data-act="toggle">▾ Как снять (хук · удержание · CTA)</div>
+    <div class="detail">
+      ${i.hook?`<div class="d"><b>🪝 Хук:</b> ${esc(i.hook)}</div>`:""}
+      ${i.shoot?`<div class="d"><b>🎬 Показать:</b> ${esc(i.shoot)}</div>`:""}
+      ${i.retention?`<div class="d"><b>⏱ Удержание:</b> ${esc(i.retention)}</div>`:""}
+      ${i.cta?`<div class="d"><b>📣 Призыв:</b> ${esc(i.cta)}</div>`:""}
+      ${i.why?`<div class="d"><b>📈 Почему:</b> ${esc(i.why)}</div>`:""}
+    </div>` : "";
+  return `<div class="ideacard ${i.used?"used":""}" data-id="${i.id}">
+    <div class="tags">
+      <span class="tag rubric" style="background:${r.color}">${r.emoji} ${r.name}</span>
+      <span class="tag ${fmtClass}">${i.format==="Reels"?"🎬 ":""}${i.format}</span>
+      ${i.mine?`<span class="tag mine">моя</span>`:""}
+    </div>
+    ${i.viral&&i.viral.length?`<div class="goals">${goalBadges(i.viral)}</div>`:""}
+    <h3>${esc(i.title)}</h3>
+    ${i.hook?`<p class="hookline">🪝 ${esc(i.hook)}</p>`:(i.text?`<p>${esc(i.text)}</p>`:"")}
+    ${detail}
+    <div class="foot">
+      <button class="icbtn fav ${i.fav?"on":""}" data-act="fav" title="В избранное">${i.fav?"⭐":"☆"}</button>
+      <button class="icbtn done ${i.used?"on":""}" data-act="used" title="Опубликовано">✓</button>
+      <span class="spacer"></span>
+      <button class="icbtn" data-act="edit" title="Редактировать">✏️</button>
+      <button class="icbtn" data-act="del" title="Удалить">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function render(){
+  renderStats(); renderChips();
+  const list = filtered();
+  if(list.length===0){ grid.innerHTML=""; empty.style.display="block"; }
+  else{ empty.style.display="none"; grid.innerHTML = list.map(card).join(""); }
+  $("#favFilter").classList.toggle("on", state.favOnly);
+  $("#hideUsed").classList.toggle("on", state.hideUsed);
+  grid.querySelectorAll(".ideacard").forEach(el=>{
+    const id = el.dataset.id;
+    el.querySelectorAll("[data-act]").forEach(b=>{
+      b.onclick=()=>act(b.dataset.act, id, b, el);
+    });
+  });
+}
+
+function act(a,id,btn,el){
+  if(a==="toggle"){
+    const d = el.querySelector(".detail");
+    const open = d.classList.toggle("open");
+    btn.textContent = (open?"▴ ":"▾ ") + "Как снять (хук · удержание · CTA)";
+    return;
+  }
+  const i = ideas.find(x=>x.id===id); if(!i) return;
+  if(a==="fav"){ i.fav=!i.fav; save(); render(); }
+  else if(a==="used"){ i.used=!i.used; save(); render(); }
+  else if(a==="edit"){ openModal(i); }
+  else if(a==="del"){
+    if(confirm("Удалить идею «"+i.title+"»?")){ ideas=ideas.filter(x=>x.id!==id); save(); render(); }
+  }
+}
+
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ============ Модалка ============ */
+function fillRubricSelect(){
+  $("#fRubric").innerHTML = RUBRICS.map(r=>`<option value="${r.id}">${r.emoji} ${r.name}</option>`).join("");
+}
+function openModal(i){
+  editingId = i?i.id:null;
+  $("#modalTitle").textContent = i?"Редактировать идею":"Своя идея";
+  $("#fTitle").value = i?i.title:"";
+  $("#fText").value = i?(i.text||i.hook||""):"";
+  $("#fRubric").value = i?i.rubric:RUBRICS[0].id;
+  $("#fFormat").value = i?i.format:"Reels";
+  $("#overlay").classList.add("show");
+  $("#fTitle").focus();
+}
+function closeModal(){ $("#overlay").classList.remove("show"); editingId=null; }
+function saveModal(){
+  const title = $("#fTitle").value.trim();
+  if(!title){ $("#fTitle").focus(); return; }
+  const data = {title, text:$("#fText").value.trim(), rubric:$("#fRubric").value, format:$("#fFormat").value};
+  if(editingId){
+    const i = ideas.find(x=>x.id===editingId); Object.assign(i,data);
+  }else{
+    ideas.unshift({id:"u-"+Date.now(), ...data, hook:"", shoot:"", retention:"", cta:"", why:"", viral:[], mine:true, fav:false, used:false});
+  }
+  save(); closeModal(); render();
+}
+
+/* ============ Показ идеи в баннере (общий для рандома и AI) ============ */
+function genBlocks(i){
+  const blocks = [
+    ["🪝","Хук (первые 3 сек)", i.hook, true],
+    ["🎬","Что показать", i.shoot, false],
+    ["⏱","Удержание", i.retention, false],
+    ["📣","Призыв (CTA)", i.cta, false],
+    ["📈","Почему зайдёт", i.why, true],
+  ];
+  const present = blocks.filter(b=>b[2]);
+  if(!present.length) return `<div class="genblock full"><div class="gt">${esc(i.text||"Бери и снимай 🌿")}</div></div>`;
+  return present.map(b=>`<div class="genblock ${b[3]?"full":""}"><div class="gl">${b[0]} ${b[1]}</div><div class="gt">${esc(b[2])}</div></div>`).join("");
+}
+function showIdea(i, source){
+  const r = rubMap[i.rubric] || {name:i.rubric||"Идея", emoji:"🌿"};
+  const gen = $("#gen");
+  gen.classList.toggle("ai", source==="ai");
+  $("#genIcon").textContent = source==="ai" ? "✨" : "💡";
+  $("#genRubric").textContent = (r.emoji||"")+" "+r.name+" · "+(i.format||"Reels")+(source==="ai"?" · придумал AI":"");
+  $("#genTitle").textContent = i.title || "";
+  $("#genBadges").innerHTML = goalBadges(i.viral);
+  $("#genBody").innerHTML = genBlocks(i);
+  if(source==="ai"){
+    $("#genFoot").innerHTML = `<button class="btn btn-primary" id="genSave"><span class="es">＋</span>Сохранить в банк</button>
+      <button class="btn btn-ai" id="genMore"><span class="es">✨</span>Ещё идея</button>
+      <span class="saved" id="genSaved" style="display:none">✅ Сохранено в банк</span>`;
+    $("#genSave").onclick = saveAiIdea;
+    $("#genMore").onclick = aiGenerate;
+  } else {
+    $("#genFoot").innerHTML = `<button class="btn btn-accent" id="genMore2"><span class="es">🎲</span>Ещё</button>`;
+    $("#genMore2").onclick = surprise;
+  }
+  gen.classList.add("show");
+  gen.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ============ Генератор «Подкинь идею» (офлайн, перекос на охваты) ============ */
+function surprise(){
+  const pool = ideas.filter(i=>!i.used);
+  const src = pool.length?pool:ideas;
+  if(!src.length) return;
+  // лёгкий перекос: в 60% случаев берём идею с целью reach
+  const reachPool = src.filter(i=>(i.viral||[]).includes("reach"));
+  const chosenPool = (reachPool.length && Math.random()<0.6) ? reachPool : src;
+  const i = chosenPool[Math.floor(Math.random()*chosenPool.length)];
+  showIdea(i, "random");
+}
+
+/* ============ AI-генератор ============ */
+function showLoading(){
+  const gen = $("#gen");
+  gen.classList.add("ai","show");
+  $("#genIcon").textContent = "✨";
+  $("#genRubric").textContent = "AI подбирает идею под твой профиль…";
+  $("#genTitle").textContent = "Думаю над свежей идеей 🌿";
+  $("#genBadges").innerHTML = "";
+  $("#genBody").innerHTML = `<div class="genblock full"><div class="gt"><span class="spinner"></span> Читаю твою «Упаковку профиля» и придумываю идею под охваты…</div></div>`;
+  $("#genFoot").innerHTML = "";
+  gen.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function getProfile(){
+  // читаем из полей «Упаковки» (там всегда есть значение — дефолт или правка),
+  // с фолбэком на localStorage. Раньше брали только localStorage → у нового
+  // пользователя профиль был пустой и агенты теряли контекст.
+  const g = k=>{
+    const el = document.querySelector('[data-save="'+k+'"]');
+    const v = el ? el.value.trim() : "";
+    return v || (localStorage.getItem("pack_"+k)||"");
+  };
+  return {
+    positioning: g("positioning"),
+    name:        g("name"),
+    bio:         g("bio_ru"),
+    tone:        g("tone"),
+    highlights:  g("highlights"),
+  };
+}
+async function aiGenerate(){
+  const btn = $("#aiBtn");
+  btn.disabled = true; const oldLabel = btn.innerHTML; btn.innerHTML = `<span class="spinner"></span> Генерирую…`;
+  showLoading();
+  try{
+    // анти-повтор: последние AI-заголовки + несколько свежих из банка
+    const bankTitles = ideas.slice(0,6).map(x=>x.title);
+    const recent = [...new Set([...recentTitles, ...bankTitles])].slice(0,8);
+    const res = await fetch(API_BASE+"/api/generate", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Uprava-Token":AI_TOKEN},
+      body: JSON.stringify({ profile:getProfile(), goal:"reach", rubric: state.rubric||undefined, recent })
+    });
+    if(res.status===429){
+      $("#genTitle").textContent = "На сегодня лимит AI исчерпан 🌙";
+      $("#genBody").innerHTML = `<div class="genblock full"><div class="gt">Лимит свежих AI-идей на сегодня закончился (защита от лишних расходов). Завтра снова доступно. А пока — лови идею из банка ↓</div></div>`;
+      $("#genFoot").innerHTML = `<button class="btn btn-accent" id="genFb"><span class="es">🎲</span>Идея из банка</button>`;
+      $("#genFb").onclick = surprise;
+      return;
+    }
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const data = await res.json();
+    if(!data || !data.title) throw new Error("bad payload");
+    if(!rubMap[data.rubric]) data.rubric = "care";
+    if(!Array.isArray(data.viral) || !data.viral.length) data.viral = ["reach"];
+    lastAiIdea = data;
+    if(data.title){ recentTitles.unshift(data.title); recentTitles = recentTitles.slice(0,12); }
+    showIdea({...data, id:"ai-temp"}, "ai");
+  }catch(e){
+    $("#genTitle").textContent = "AI сейчас недоступен 😔";
+    $("#genBody").innerHTML = `<div class="genblock full"><div class="gt">Не получилось связаться с генератором. Держи идею из банка ↓</div></div>`;
+    $("#genFoot").innerHTML = `<button class="btn btn-accent" id="genFb2"><span class="es">🎲</span>Идея из банка</button>`;
+    $("#genFb2").onclick = surprise;
+  }finally{
+    btn.disabled = false; btn.innerHTML = oldLabel;
+  }
+}
+function saveAiIdea(){
+  if(!lastAiIdea) return;
+  const d = lastAiIdea;
+  ideas.unshift({
+    id:"u-"+Date.now(), rubric: rubMap[d.rubric]?d.rubric:"care", format:d.format||"Reels", title:d.title,
+    hook:d.hook||"", shoot:d.shoot||"", retention:d.retention||"", cta:d.cta||"", why:d.why||"",
+    viral:Array.isArray(d.viral)?d.viral:["reach"], text:"", mine:true, fav:false, used:false
+  });
+  save(); render();
+  const s = $("#genSaved"); if(s) s.style.display="inline";
+  const b = $("#genSave"); if(b){ b.disabled=true; b.style.opacity=".55"; }
+}
+
+/* ============ Экспорт / импорт ============ */
+function exportData(){
+  const blob = new Blob([JSON.stringify(ideas,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ideas-vikablog-"+new Date().toISOString().slice(0,10)+".json";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(file){
+  const fr = new FileReader();
+  fr.onload = ()=>{
+    try{
+      const data = JSON.parse(fr.result);
+      if(Array.isArray(data)){ ideas = data; migrate(); save(); render(); alert("Загружено идей: "+ideas.length); }
+      else alert("Файл не похож на копию идей.");
+    }catch(e){ alert("Не удалось прочитать файл."); }
+  };
+  fr.readAsText(file);
+}
+function restoreSeed(){
+  if(!confirm("Добавить недостающие базовые идеи? Твои идеи и пометки останутся.")) return;
+  const have = new Set(ideas.map(i=>i.id));
+  seedIdeas().forEach(s=>{ if(!have.has(s.id)) ideas.push(s); });
+  save(); render();
+}
+
+/* ============ События ============ */
+$("#search").oninput = e=>{ state.q=e.target.value; render(); };
+$("#formatFilter").onchange = e=>{ state.format=e.target.value; render(); };
+$("#favFilter").onclick = ()=>{ state.favOnly=!state.favOnly; render(); };
+$("#hideUsed").onclick = ()=>{ state.hideUsed=!state.hideUsed; render(); };
+$("#surprise").onclick = surprise;
+$("#aiBtn").onclick = aiGenerate;
+$("#genClose").onclick = ()=>$("#gen").classList.remove("show");
+$("#addBtn").onclick = ()=>openModal(null);
+$("#cancelBtn").onclick = closeModal;
+$("#saveBtn").onclick = saveModal;
+$("#overlay").onclick = e=>{ if(e.target.id==="overlay") closeModal(); };
+$("#exportBtn").onclick = exportData;
+$("#importBtn").onclick = ()=>$("#importFile").click();
+$("#importFile").onchange = e=>{ if(e.target.files[0]) importData(e.target.files[0]); };
+$("#restoreBtn").onclick = restoreSeed;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* ============ Агенты SMM / UGC ============ */
+const AGENT_DEFS = {
+  smm: { actions: [
+    {id:"smm.captions", label:"✍️ Подписи + хэштеги", fields:[
+      {k:"topic",  t:"textarea", label:"О чём пост / идея", ph:"Напр.: 3 растения для тёмной комнаты"},
+      {k:"format", t:"select",   label:"Формат", opts:["Reels","Карусель","Пост","Stories"]},
+    ]},
+    {id:"smm.plan", label:"📅 Контент-план на неделю", fields:[
+      {k:"focus", t:"select", label:"Акцент недели", opts:["Микс (баланс)","Польза / обучение","Охваты / новые зрители","Прогрев к продукту","Вовлечение"]},
+    ]},
+    {id:"smm.adapt", label:"🔁 Адаптировать под TG/VK", fields:[
+      {k:"text", t:"textarea", label:"Текст поста из Instagram", ph:"Вставь подпись поста…"},
+    ]},
+    {id:"smm.stories", label:"💬 Stories-активности", fields:[
+      {k:"theme", t:"text", label:"Тема недели (необязательно)", ph:"Напр.: полив"},
+    ]},
+  ]},
+  ugc: { actions: [
+    {id:"ugc.script", label:"🎬 Сценарий под товар", fields:[
+      {k:"product",  t:"text",   label:"Товар", ph:"Напр.: органическое удобрение для цветущих"},
+      {k:"category", t:"select", label:"Категория", opts:["Кашпо / горшки","Удобрение","Грунт","Фитолампа","Инструменты","Другое"]},
+      {k:"length",   t:"select", label:"Длина видео, сек", opts:["15","30","60"]},
+    ]},
+    {id:"ugc.pitch", label:"✉️ Питч-письмо бренду", fields:[
+      {k:"brand",   t:"text", label:"Бренд / магазин", ph:"Напр.: питомник «Зелёный дом»"},
+      {k:"product", t:"text", label:"Их товар / ниша", ph:"Напр.: кашпо и керамика"},
+    ]},
+    {id:"ugc.ideas", label:"💡 Идеи по категории", fields:[
+      {k:"category", t:"select", label:"Категория товара", opts:["Кашпо / горшки","Удобрение","Грунт","Фитолампа","Семена","Инструменты"]},
+    ]},
+    {id:"ugc.mediakit", label:"📄 Медиа-кит с ценами", fields:[
+      {k:"price",      t:"text", label:"Цена за 1 видео", ph:"Напр.: 1000–2000 ₽"},
+      {k:"contact",    t:"text", label:"Контакт для связи", ph:"Напр.: @vikamomplants / почта"},
+      {k:"experience", t:"text", label:"Опыт / особенности (необязательно)", ph:"Напр.: снимаю дома, быстрый монтаж"},
+    ]},
+  ]},
+};
+const agentState = { smm:{action:null}, ugc:{action:null} };
+
+function renderAgent(agent){
+  const row = document.querySelector('.actions-row[data-agent="'+agent+'"]');
+  if(!row) return;
+  const defs = AGENT_DEFS[agent].actions;
+  row.innerHTML = defs.map(a=>`<button class="act-chip" data-id="${a.id}">${a.label.replace(/^(\S+)\s+/,'<span class="es">$1</span>')}</button>`).join("");
+  row.querySelectorAll(".act-chip").forEach(b=>b.onclick=()=>selectAction(agent,b.dataset.id));
+  selectAction(agent, agentState[agent].action || defs[0].id);
+}
+function selectAction(agent,id){
+  agentState[agent].action = id;
+  const row = document.querySelector('.actions-row[data-agent="'+agent+'"]');
+  row.querySelectorAll(".act-chip").forEach(b=>b.classList.toggle("on", b.dataset.id===id));
+  renderForm(agent,id);
+}
+function renderForm(agent,id){
+  const def = AGENT_DEFS[agent].actions.find(a=>a.id===id);
+  const panel = document.querySelector('.agent-panel[data-agent="'+agent+'"]');
+  const fields = def.fields.map(f=>{
+    const lbl = `<label>${esc(f.label)}</label>`;
+    if(f.t==="textarea") return `<div class="fld">${lbl}<textarea data-k="${f.k}" placeholder="${esc(f.ph||'')}"></textarea></div>`;
+    if(f.t==="select")   return `<div class="fld">${lbl}<select data-k="${f.k}">${f.opts.map(o=>`<option>${esc(o)}</option>`).join("")}</select></div>`;
+    return `<div class="fld">${lbl}<input type="text" data-k="${f.k}" placeholder="${esc(f.ph||'')}"></div>`;
+  }).join("");
+  panel.innerHTML = `<div class="agent-form">${fields}
+    <button class="btn btn-ai" data-go><span class="es">✨</span>Сгенерировать</button></div>
+    <div class="agent-out" id="out-${agent}" style="display:none"></div>`;
+  panel.querySelector("[data-go]").onclick = ()=>runAgent(agent,id);
+}
+async function runAgent(agent,id){
+  const panel = document.querySelector('.agent-panel[data-agent="'+agent+'"]');
+  const input = {};
+  panel.querySelectorAll("[data-k]").forEach(el=>input[el.dataset.k]=el.value.trim());
+  const out = document.querySelector("#out-"+agent);
+  const goBtn = panel.querySelector("[data-go]");
+  goBtn.disabled = true; const ol = goBtn.innerHTML; goBtn.innerHTML = `<span class="spinner"></span> Генерирую…`;
+  out.style.display = "block";
+  out.innerHTML = `<div class="agent-loading"><span class="spinner"></span> Агент думает над ответом…</div>`;
+  try{
+    const res = await fetch(API_BASE+"/api/agent", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Uprava-Token":AI_TOKEN},
+      body: JSON.stringify({ action:id, profile:getProfile(), input })
+    });
+    if(res.status===429){
+      const j = await res.json().catch(()=>({}));
+      out.innerHTML = `<div class="agent-msg">⏳ ${esc(j.message||"Лимит на сегодня исчерпан. Завтра снова доступно.")}</div>`;
+      return;
+    }
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const data = await res.json();
+    if(!data || !data.text) throw new Error("empty");
+    out.innerHTML = `<div class="agent-md">${mdToHtml(data.text)}</div>
+      <div class="copybar">
+        <button class="btn-mini" data-copy><span class="es">📋</span>Скопировать</button>
+        <button class="btn-mini" data-again><span class="es">✨</span>Ещё вариант</button>
+      </div>`;
+    out.querySelector("[data-copy]").onclick = ()=>{
+      navigator.clipboard.writeText(data.text).then(()=>{ out.querySelector("[data-copy]").textContent="✅ Скопировано"; });
+    };
+    out.querySelector("[data-again]").onclick = ()=>runAgent(agent,id);
+    out.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }catch(e){
+    out.innerHTML = `<div class="agent-msg">😔 AI сейчас недоступен. Попробуй ещё раз через минуту.</div>`;
+  }finally{ goBtn.disabled=false; goBtn.innerHTML=ol; }
+}
+/* мини-рендер Markdown → HTML (заголовки, списки, жирный) */
+function mdToHtml(md){
+  const lines = esc(md).split(/\r?\n/);
+  let html = "", inList = false;
+  const inline = s => s.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").replace(/(^|[^*])\*([^*]+)\*/g,"$1<i>$2</i>");
+  const closeList = ()=>{ if(inList){ html+="</ul>"; inList=false; } };
+  for(const raw of lines){
+    const line = raw.trim();
+    if(!line){ closeList(); continue; }
+    let m;
+    if((m=line.match(/^#{1,4}\s+(.*)$/))){ closeList(); html+="<h3>"+inline(m[1])+"</h3>"; continue; }
+    // markdown-таблица: строку-разделитель пропускаем, строку-данные показываем как «ячейка — ячейка»
+    if(line.indexOf("|")>-1 && /\|.*\|/.test(line)){
+      if(/^\|?[\s:\-|]+\|?$/.test(line)) continue;            // |---|---|
+      closeList();
+      const cells=line.replace(/^\s*\||\|\s*$/g,"").split("|").map(c=>inline(c.trim())).filter(c=>c!=="");
+      if(cells.length){ html+='<div class="mdrow">'+cells.join(" — ")+"</div>"; continue; }
+    }
+    if((m=line.match(/^[-•*]\s+(.*)$/))){ if(!inList){html+="<ul>";inList=true;} html+="<li>"+inline(m[1])+"</li>"; continue; }
+    if((m=line.match(/^\d+[.)]\s+(.*)$/))){ if(!inList){html+="<ul>";inList=true;} html+="<li>"+inline(m[1])+"</li>"; continue; }
+    closeList(); html+="<p>"+inline(line)+"</p>";
+  }
+  closeList();
+  return html;
+}
+
+/* ============ Вкладки ============ */
+const TABS = ["ideas","smm","ugc","pack"];
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
+    TABS.forEach(name=>{ const el=document.getElementById("tab-"+name); if(el) el.hidden = t.dataset.tab!==name; });
+    if(t.dataset.tab==="smm") renderAgent("smm");
+    if(t.dataset.tab==="ugc") renderAgent("ugc");
+    window.scrollTo({top:0,behavior:"smooth"});
+  };
+});
+
+/* ============ Автосохранение упаковки ============ */
+function initPack(){
+  document.querySelectorAll("[data-save]").forEach(el=>{
+    const k="pack_"+el.dataset.save;
+    const v=localStorage.getItem(k);
+    if(v!==null) el.value=v;
+    el.addEventListener("input",()=>localStorage.setItem(k,el.value));
+  });
+  document.querySelectorAll("[data-check]").forEach(el=>{
+    const k="packchk_"+el.dataset.check;
+    if(localStorage.getItem(k)==="1") el.checked=true;
+    el.addEventListener("change",()=>localStorage.setItem(k,el.checked?"1":"0"));
+  });
+}
+
+/* ============ Старт ============ */
+fillRubricSelect();
+load();
+render();
+initPack();
+</script>
+</body>
+</html>
