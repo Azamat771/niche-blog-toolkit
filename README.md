@@ -150,6 +150,13 @@ See [`config/niche.schema.json`](./config/niche.schema.json) for the full schema
 
 PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+## Also in this repo: `zakupki/`
+
+An unrelated standalone tool that lives here for convenience: an analyzer for Russian
+public procurement (44-ФЗ / 223-ФЗ) that finds tenders **nobody bid on** and ranks
+niches with no competitors. Zero dependencies, its own CLI, its own data — it shares
+nothing with the content studio above. See [zakupki/README.md](./zakupki/README.md).
+
 ## Acknowledgements
 
 The plants example (154 ideas, full structured form) is the curated dataset of a working blog

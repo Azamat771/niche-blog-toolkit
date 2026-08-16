@@ -8,6 +8,10 @@ backend/.env
 frontend/dist/
 backend/trends-cache.json
 
+# Выгрузки и отчёты анализатора закупок (гигабайты архивов ЕИС)
+zakupki/data/
+zakupki/out/
+
 # Node
 node_modules/
 npm-debug.log*

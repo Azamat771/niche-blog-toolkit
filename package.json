@@ -11,7 +11,10 @@
     "apply:fitness":  "node scripts/apply-niche.js examples/fitness",
     "seed:plants":    "node scripts/seed-ideas.js examples/plants --count=150",
     "seed:fitness":   "node scripts/seed-ideas.js examples/fitness --count=30",
-    "backend":        "cd backend && node server.js"
+    "backend":        "cd backend && node server.js",
+    "zakupki":        "node zakupki/cli.js",
+    "zakupki:demo":   "node zakupki/cli.js demo",
+    "zakupki:test":   "node zakupki/cli.js selftest"
   },
   "keywords": [
     "instagram", "content-strategy", "smm", "ugc", "ai-agent",
